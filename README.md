@@ -1,5 +1,5 @@
 # Rollup Plugin Visualizer for Mermaid
 
-![GitHub License](https://img.shields.io/github/license/abiriadev/rollup-plugin-visualizer-mermaid?style=for-the-badge&color=ff3670)
+![LICENSE](https://img.shields.io/badge/LICENSE-WTFPL-ff3670?style=for-the-badge)
 
 Convert output of [rollup-plugin-visualizer](https://github.com/btd/rollup-plugin-visualizer) to [Mermaid](https://mermaid.js.org) diagram.
