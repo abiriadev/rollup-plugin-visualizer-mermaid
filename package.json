@@ -1,0 +1,27 @@
+{
+	"name": "rollup-plugin-visualizer-mermaid",
+	"version": "1.0.0",
+	"description": "Convert output of rollup-plugin-visualizer to Mermaid diagram",
+	"main": "dist/index.js",
+	"bin": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "swc src -d dist --strip-leading-paths"
+	},
+	"keywords": [
+		"visualizer",
+		"mermaid",
+		"graph",
+		"diagram"
+	],
+	"author": "Abiria",
+	"license": "WTFPL",
+	"devDependencies": {
+		"@swc/cli": "^0.3.12",
+		"@swc/core": "^1.5.7",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"type-mermaid": "^1.1.0"
+	}
+}
