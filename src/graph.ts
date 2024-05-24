@@ -3,7 +3,6 @@ import { ModuleUID } from './types.js'
 import {
 	MermaidNodeStyle,
 	indentHelper,
-	mermaidLink,
 	styleMermaidNode,
 } from './utils.js'
 
