@@ -1,7 +1,7 @@
 import { match, P } from 'ts-pattern'
 
 export interface MermaidNodeStyle {
-	color: string
+	color?: [string, string]
 	shape: MermaidNodeShape
 }
 
@@ -34,7 +34,10 @@ export const styleMermaidNode = (
 			.exhaustive()}`,
 	]
 
-	if (color) lines.push(`style ${id} stroke:${color}`)
+	if (color)
+		lines.push(
+			`style ${id} stroke:${color[0]},fill:${color[1]}`,
+		)
 
 	return lines
 }

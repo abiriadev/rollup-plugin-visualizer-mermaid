@@ -1,21 +1,44 @@
 import { match } from 'ts-pattern'
 import { ModuleUID } from './types.js'
+import { indentHelper } from './utils.js'
 import {
 	MermaidNodeStyle,
-	indentHelper,
 	styleMermaidNode,
-} from './utils.js'
+} from './mermaid.js'
+
+export type NodeType =
+	| 'chunk'
+	| 'asset'
+	| 'virtual'
+	| 'external'
+	| 'entry'
 
 export interface Node {
 	fileName: string
-	type:
-		| 'chunk'
-		| 'asset'
-		| 'virtual'
-		| 'external'
-		| 'entry'
+	type: NodeType
 	imports: Array<ModuleUID>
 }
+
+const nodeType2Style = (type: NodeType) =>
+	match<NodeType, MermaidNodeStyle>(type)
+		.with('chunk', () => ({
+			shape: 'round',
+		}))
+		.with('asset', () => ({
+			shape: 'round',
+		}))
+		.with('virtual', () => ({
+			color: ['#db7070', '#ffebeb'],
+			shape: 'round',
+		}))
+		.with('external', () => ({
+			color: ['#70db79', '#ebffec'],
+			shape: 'round',
+		}))
+		.with('entry', () => ({
+			shape: 'hexagon',
+		}))
+		.exhaustive()
 
 // Directed, possibly cyclic dependency graph
 export class Graph {
@@ -47,28 +70,26 @@ export class Graph {
 	renderMermaid(): string {
 		let lines: Array<string> = []
 
-		this.#nodes.forEach(({ fileName, type }, id) => {
-			lines.push(
-				styleMermaidNode(
-					id,
-					fileName!,
-					match<Node['type'], MermaidNodeStyle>(
-						type!,
-					)
-						.with('entry', () => 'rhombus')
-						.with('chunk', () => 'round')
-						.with('virtual', () => 'stadium')
-						.with('external', () => 'hexagon')
-						.otherwise(() => 'default'),
-				),
-			)
-		})
+		this.#nodes.forEach(
+			({ fileName, type }, id) =>
+				(lines = lines.concat(
+					styleMermaidNode(
+						id,
+						fileName!,
+						nodeType2Style(type!),
+					),
+				)),
+		)
 
-		this.#nodes.forEach(({ imports }, id) => {
-			imports?.forEach(importedId => {
-				lines.push(`${id} --> ${importedId}`)
-			})
-		})
+		this.#nodes.forEach(
+			({ imports }, id) =>
+				void (lines = lines.concat(
+					imports!.map(
+						importedId =>
+							`${id} --> ${importedId}`,
+					),
+				)),
+		)
 
 		lines = indentHelper(lines)
 
