@@ -30,4 +30,5 @@ Object.entries(data.nodeMetas).forEach(
 	},
 )
 
-console.log(graph.toJson())
+// console.log(graph.toJson())
+console.log(graph.renderMermaid())

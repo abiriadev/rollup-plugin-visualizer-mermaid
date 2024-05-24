@@ -1,4 +1,11 @@
-import { ModuleUID } from './types'
+import { match } from 'ts-pattern'
+import { ModuleUID } from './types.js'
+import {
+	MermaidNodeStyle,
+	indentHelper,
+	mermaidLink,
+	styleMermaidNode,
+} from './utils.js'
 
 export interface Node {
 	fileName: string
@@ -39,7 +46,35 @@ export class Graph {
 	}
 
 	renderMermaid(): string {
-		// TODO
-		return ''
+		let lines: Array<string> = []
+
+		this.#nodes.forEach(({ fileName, type }, id) => {
+			lines.push(
+				styleMermaidNode(
+					id,
+					fileName!,
+					match<Node['type'], MermaidNodeStyle>(
+						type!,
+					)
+						.with('entry', () => 'rhombus')
+						.with('chunk', () => 'round')
+						.with('virtual', () => 'stadium')
+						.with('external', () => 'hexagon')
+						.otherwise(() => 'default'),
+				),
+			)
+		})
+
+		this.#nodes.forEach(({ imports }, id) => {
+			imports?.forEach(importedId => {
+				lines.push(`${id} --> ${importedId}`)
+			})
+		})
+
+		lines = indentHelper(lines)
+
+		lines.unshift('flowchart LR')
+
+		return lines.join('\n')
 	}
 }
