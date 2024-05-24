@@ -23,5 +23,8 @@
 		"chokidar": "^3.6.0",
 		"typescript": "^5.4.5"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"ts-pattern": "^5.1.2"
+	}
 }
